@@ -29,6 +29,23 @@ This guide walks you through deploying the Tech Blog & Portfolio application to 
 
 ### Step 2: Configure Environment Variables
 
+#### Option A: Automatic Configuration (Recommended)
+
+Use our automated setup script:
+
+```bash
+# Install Railway CLI if not already installed
+npm install -g @railway/cli
+
+# Login to Railway
+railway login
+
+# Run automatic environment setup
+node scripts/auto-setup-railway.js techblog-test techblog-prod
+```
+
+#### Option B: Manual Configuration
+
 In your Railway project dashboard, go to "Variables" and add:
 
 ```bash
@@ -139,7 +156,11 @@ RATE_LIMIT_MAX_REQUESTS=100
 The project includes these Railway-specific files:
 
 - `railway.json` - Railway deployment configuration
+- `railway.toml` - Railway environment configuration
 - `nixpacks.toml` - Build configuration for Railway
+- `railway-env.json` - Environment variables template
+- `scripts/auto-setup-railway.js` - Automatic environment setup script
+- `scripts/setup-railway-env.sh` - Shell script for environment setup
 
 ## Environment-Specific URLs
 

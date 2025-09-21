@@ -1,0 +1,35 @@
+[build]
+builder = "nixpacks"
+
+[deploy]
+startCommand = "npm start"
+healthcheckPath = "/api/v1/health"
+healthcheckTimeout = 100
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+# Environment variables for test environment
+[environments.test.variables]
+NODE_ENV = "test"
+PORT = "3000"
+JWT_SECRET = "test-secret-key-change-this"
+JWT_EXPIRES_IN = "1h"
+CORS_ORIGIN = "https://techblog-test.railway.app"
+LOG_LEVEL = "error"
+ENABLE_SWAGGER = "false"
+ENABLE_DEBUG_ROUTES = "false"
+RATE_LIMIT_WINDOW_MS = "900000"
+RATE_LIMIT_MAX_REQUESTS = "100"
+
+# Environment variables for production environment
+[environments.production.variables]
+NODE_ENV = "production"
+PORT = "3000"
+JWT_SECRET = "production-secret-key-from-vault"
+JWT_EXPIRES_IN = "24h"
+CORS_ORIGIN = "https://yourdomain.com"
+LOG_LEVEL = "info"
+ENABLE_SWAGGER = "false"
+ENABLE_DEBUG_ROUTES = "false"
+RATE_LIMIT_WINDOW_MS = "900000"
+RATE_LIMIT_MAX_REQUESTS = "100"
