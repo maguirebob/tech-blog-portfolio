@@ -5,6 +5,8 @@ import compression from 'compression'
 import rateLimit from 'express-rate-limit'
 import dotenv from 'dotenv'
 import { prisma } from './lib/prisma'
+import userRoutes from './routes/userRoutes'
+import articleRoutes from './routes/articleRoutes'
 
 // Load environment variables
 dotenv.config()
@@ -73,6 +75,10 @@ app.get('/api/v1/health/db', async (_req, res) => {
     })
   }
 })
+
+// Mount API routes
+app.use('/api/v1/users', userRoutes)
+app.use('/api/v1/articles', articleRoutes)
 
 // Basic API routes (will be expanded in Phase 2)
 app.get('/api/v1/stats', async (_req, res) => {

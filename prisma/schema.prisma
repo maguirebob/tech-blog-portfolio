@@ -15,6 +15,7 @@ enum Role {
   USER
   ADMIN
   AUTHOR
+  author
 }
 
 enum ArticleStatus {
