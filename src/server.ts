@@ -78,9 +78,11 @@ app.get('/api/v1/stats', async (_req, res) => {
       data: statsObject
     })
   } catch (error) {
+    console.error('Stats error:', error)
     res.status(500).json({
       success: false,
-      error: 'Failed to fetch statistics'
+      error: 'Failed to fetch statistics',
+      details: error instanceof Error ? error.message : 'Unknown error'
     })
   }
 })
@@ -112,9 +114,11 @@ app.post('/api/v1/seed', async (_req, res) => {
       message: 'Database seeded successfully'
     })
   } catch (error) {
+    console.error('Seed error:', error)
     res.status(500).json({
       success: false,
-      error: 'Failed to seed database'
+      error: 'Failed to seed database',
+      details: error instanceof Error ? error.message : 'Unknown error'
     })
   }
 })
