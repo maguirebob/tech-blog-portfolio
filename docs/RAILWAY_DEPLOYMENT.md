@@ -79,15 +79,23 @@ RATE_LIMIT_MAX_REQUESTS=100
 
 1. **Connect to GitHub**
    - Railway will automatically detect your `package.json`
-   - It will use the `railway.json` configuration
+   - It will use the `railway.json` and `nixpacks.toml` configuration
 
 2. **Deploy**
-   - Railway will automatically build and deploy
+   - Railway will use Nixpacks (not Docker) for deployment
+   - The `nixpacks.toml` prevents TypeScript build issues
    - Watch the build logs for any issues
 
 3. **Get Your URL**
    - Railway will provide a URL like `https://techblog-test.railway.app`
    - Note this URL for testing
+
+### Important Notes
+
+- **Entry Point**: The app uses `server.js` at the root (not TypeScript)
+- **No Build Step**: We use `nixpacks.toml` to prevent build failures
+- **Database Tables**: Tables are created automatically via API endpoints
+- **Simple Approach**: Avoids complex TypeScript compilation issues
 
 ### Step 4: Verify Deployment
 
@@ -176,17 +184,23 @@ After deployment, you'll have:
 1. **Build Failures**
    - Check Railway build logs
    - Ensure all dependencies are in `package.json`
-   - Verify `railway.json` configuration
+   - Verify `railway.json` and `nixpacks.toml` configuration
+   - **TypeScript Issues**: Use `server.js` entry point instead of TypeScript
 
 2. **Database Connection Issues**
    - Verify `DATABASE_URL` is set correctly
    - Check PostgreSQL service is running
-   - Ensure database migrations have run
+   - **Missing Tables**: Tables are created automatically via API endpoints
 
 3. **Environment Variable Issues**
    - Double-check all required variables are set
    - Verify variable names match exactly
    - Check for typos in values
+
+4. **SiteStats Table Missing**
+   - **Error**: `The table 'public.SiteStats' does not exist`
+   - **Solution**: Call `/api/v1/stats` endpoint to auto-create tables
+   - **Root Cause**: Database tables are created on-demand, not via migrations
 
 ### Getting Help
 
