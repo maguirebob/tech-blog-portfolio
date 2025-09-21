@@ -25,6 +25,16 @@ The specific design document for this Tech Blog & Portfolio website implementati
 - Environment configuration
 - Task distribution
 
+### 3. RAILWAY_DEPLOYMENT.md
+Step-by-step guide for deploying the application to Railway for both test and production environments. Includes:
+
+- Railway account setup
+- Project creation and configuration
+- Environment variable setup
+- Database provisioning
+- Deployment verification
+- Troubleshooting guide
+
 ## Usage
 
 - **For Development**: Reference the Tech Blog Portfolio Website Design.md for project-specific implementation details

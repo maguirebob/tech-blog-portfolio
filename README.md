@@ -4,6 +4,8 @@ A modern tech blog and portfolio website built with Node.js, Express, PostgreSQL
 
 📚 **Documentation**: See the [docs/](docs/) directory for complete design and architecture documentation.
 
+🚀 **Deployment**: See [docs/RAILWAY_DEPLOYMENT.md](docs/RAILWAY_DEPLOYMENT.md) for Railway deployment instructions.
+
 ## 🚀 Quick Start
 
 ### Prerequisites
