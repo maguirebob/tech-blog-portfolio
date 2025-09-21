@@ -94,12 +94,13 @@ jspm_packages/
 ehthumbs.db
 Thumbs.db
 
-# Prisma
-!prisma/migrations/
-
 # Uploads
 uploads/
 
 # Test files
 test-results/
 playwright-report/
+
+# Allow migrations to be committed
+!prisma/migrations/
+!prisma/schema.prisma
