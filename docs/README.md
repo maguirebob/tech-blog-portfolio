@@ -35,6 +35,17 @@ Step-by-step guide for deploying the application to Railway for both test and pr
 - Deployment verification
 - Troubleshooting guide
 
+### 4. RAILWAY_DEPLOYMENT_CHECKLIST.md
+Comprehensive checklist for Railway deployments based on best practices and common issues. Includes:
+
+- Pre-deployment checklist
+- Project structure requirements
+- Package.json configuration
+- Common issues and solutions
+- Testing procedures
+- Troubleshooting guide
+- Quick fixes for common problems
+
 ## Usage
 
 - **For Development**: Reference the Tech Blog Portfolio Website Design.md for project-specific implementation details
