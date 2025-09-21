@@ -197,9 +197,21 @@ After deployment, you'll have:
    - Verify variable names match exactly
    - Check for typos in values
 
-4. **SiteStats Table Missing**
+4. **Branch Mismatch Issues** ⚠️ **CRITICAL**
+   - **Problem**: Working on `develop` branch but Railway deploying from `main`
+   - **Symptom**: Code changes not reflected in deployment
+   - **Solution**: Merge `develop` to `main` or configure Railway to deploy from correct branch
+   - **Prevention**: Always verify which branch Railway is configured to deploy from
+
+5. **Missing Prisma Migrations** ⚠️ **CRITICAL**
+   - **Problem**: `prisma/migrations/` directory excluded by `.gitignore`
+   - **Symptom**: "No migration found in prisma/migrations" error
+   - **Solution**: Fix `.gitignore` to include migrations directory
+   - **Prevention**: Ensure all necessary files are committed to Git
+
+6. **SiteStats Table Missing**
    - **Error**: `The table 'public.SiteStats' does not exist`
-   - **Solution**: Call `/api/v1/stats` endpoint to auto-create tables
+   - **Solution**: Call `/api/v1/seed` endpoint to create and populate tables
    - **Root Cause**: Database tables are created on-demand, not via migrations
 
 ### Getting Help
