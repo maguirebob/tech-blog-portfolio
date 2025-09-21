@@ -106,6 +106,28 @@ app.post('/api/v1/migrate', async (_req, res) => {
   }
 })
 
+// Debug endpoint to check database tables
+app.get('/api/v1/debug/tables', async (_req, res) => {
+  try {
+    const tables = await prisma.$queryRaw`
+      SELECT table_name 
+      FROM information_schema.tables 
+      WHERE table_schema = 'public'
+    `
+    res.json({
+      success: true,
+      tables: tables
+    })
+  } catch (error) {
+    console.error('Debug error:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch tables',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    })
+  }
+})
+
 // Seed endpoint for development/testing
 app.post('/api/v1/seed', async (_req, res) => {
   try {
