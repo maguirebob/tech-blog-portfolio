@@ -87,25 +87,25 @@ app.get('/api/v1/stats', async (_req, res) => {
   }
 })
 
-// Migration endpoint for development/testing
-app.post('/api/v1/migrate', async (_req, res) => {
+// Database initialization endpoint
+app.post('/api/v1/init-db', async (_req, res) => {
   try {
     const { execSync } = require('child_process')
-    const output = execSync('npx prisma migrate deploy', { 
+    const output = execSync('npx prisma db push', { 
       encoding: 'utf8',
       stdio: 'pipe'
     })
-    console.log('Migration output:', output)
+    console.log('DB push output:', output)
     res.json({
       success: true,
-      message: 'Database migrations completed successfully',
+      message: 'Database schema created successfully',
       output: output
     })
   } catch (error) {
-    console.error('Migration error:', error)
+    console.error('DB init error:', error)
     res.status(500).json({
       success: false,
-      error: 'Failed to run migrations',
+      error: 'Failed to initialize database',
       details: error instanceof Error ? error.message : 'Unknown error'
     })
   }
