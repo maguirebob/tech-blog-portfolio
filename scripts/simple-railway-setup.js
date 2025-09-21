@@ -44,14 +44,12 @@ function setupRailwayProject(projectName, environment) {
     return false;
   }
 
-  // Set all environment variables in one command
-  const envPairs = Object.entries(envVars)
-    .map(([key, value]) => `--set "${key}=${value}"`)
-    .join(' ');
-  
-  const command = `railway variables ${envPairs} --service ${projectName}`;
-  if (!execCommand(command, `Setting environment variables`)) {
-    return false;
+  // Set each environment variable individually
+  for (const [key, value] of Object.entries(envVars)) {
+    const command = `railway variables --set "${key}=${value}" --service ${projectName}`;
+    if (!execCommand(command, `Setting ${key}`)) {
+      log(`⚠️  Continuing with other variables...`, 'yellow');
+    }
   }
 
   return true;
@@ -61,15 +59,15 @@ function main() {
   const args = process.argv.slice(2);
   
   if (args.length < 2) {
-    log('Usage: node auto-setup-railway.js <test-project-name> <production-project-name>', 'yellow');
-    log('Example: node auto-setup-railway.js techblog-test techblog-prod', 'yellow');
+    log('Usage: node simple-railway-setup.js <test-project-name> <production-project-name>', 'yellow');
+    log('Example: node simple-railway-setup.js techblog-test techblog-prod', 'yellow');
     process.exit(1);
   }
 
   const [testProject, prodProject] = args;
 
-  log('🚀 Railway Environment Auto-Setup', 'bright');
-  log('================================', 'bright');
+  log('🚀 Railway Environment Simple Setup', 'bright');
+  log('===================================', 'bright');
 
   // Check if Railway CLI is installed
   if (!execCommand('railway --version', 'Checking Railway CLI')) {

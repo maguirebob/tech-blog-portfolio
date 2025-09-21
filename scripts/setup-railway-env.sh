@@ -24,16 +24,18 @@ setup_project_env() {
     echo "🔧 Setting up environment for $project_name ($environment)..."
     
     # Set environment variables
-    railway variables set NODE_ENV=$environment --project $project_name
-    railway variables set PORT=3000 --project $project_name
-    railway variables set JWT_SECRET="$environment-secret-key-change-this" --project $project_name
-    railway variables set JWT_EXPIRES_IN="24h" --project $project_name
-    railway variables set CORS_ORIGIN=$cors_origin --project $project_name
-    railway variables set LOG_LEVEL="info" --project $project_name
-    railway variables set ENABLE_SWAGGER="false" --project $project_name
-    railway variables set ENABLE_DEBUG_ROUTES="false" --project $project_name
-    railway variables set RATE_LIMIT_WINDOW_MS="900000" --project $project_name
-    railway variables set RATE_LIMIT_MAX_REQUESTS="100" --project $project_name
+    railway variables \
+      --set "NODE_ENV=$environment" \
+      --set "PORT=3000" \
+      --set "JWT_SECRET=$environment-secret-key-change-this" \
+      --set "JWT_EXPIRES_IN=24h" \
+      --set "CORS_ORIGIN=$cors_origin" \
+      --set "LOG_LEVEL=info" \
+      --set "ENABLE_SWAGGER=false" \
+      --set "ENABLE_DEBUG_ROUTES=false" \
+      --set "RATE_LIMIT_WINDOW_MS=900000" \
+      --set "RATE_LIMIT_MAX_REQUESTS=100" \
+      --service $project_name
     
     echo "✅ Environment variables set for $project_name"
 }
