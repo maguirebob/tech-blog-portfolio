@@ -8,7 +8,7 @@ async function main() {
 
   // Create admin user
   const adminPassword = await bcrypt.hash('AdminPassword123!', 12)
-  const admin = await prisma.user.upsert({
+  console.log("Creating admin user..."); const admin = await prisma.user.upsert({
     where: { username: 'admin' },
     update: {},
     create: {
@@ -42,7 +42,7 @@ async function main() {
 
   // Create test user
   const testPassword = await bcrypt.hash('TestPassword123!', 12)
-  const testUser = await prisma.user.upsert({
+  console.log("Creating test user..."); const testUser = await prisma.user.upsert({
     where: { username: 'testuser' },
     update: {},
     create: {
@@ -541,7 +541,7 @@ A modern task management application with real-time collaboration features.
         featured: false,
         order: 3,
         authorId: author.id
-      }),
+      }),,
     ])
 
   // Create project-technology relationships
