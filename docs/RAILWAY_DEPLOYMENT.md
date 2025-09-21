@@ -209,7 +209,13 @@ After deployment, you'll have:
    - **Solution**: Fix `.gitignore` to include migrations directory
    - **Prevention**: Ensure all necessary files are committed to Git
 
-6. **SiteStats Table Missing**
+6. **Nixpacks Configuration Issues** ⚠️ **CRITICAL**
+   - **Problem**: `nixpacks.toml` had incorrect build/start command configuration
+   - **Symptom**: Build failures or incorrect deployment behavior
+   - **Solution**: Fix `nixpacks.toml` with correct commands (ChatGPT provided the fix)
+   - **Prevention**: Verify `nixpacks.toml` matches your actual build process
+
+7. **SiteStats Table Missing**
    - **Error**: `The table 'public.SiteStats' does not exist`
    - **Solution**: Call `/api/v1/seed` endpoint to create and populate tables
    - **Root Cause**: Database tables are created on-demand, not via migrations
