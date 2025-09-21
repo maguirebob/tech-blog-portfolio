@@ -120,9 +120,28 @@ app.post('/api/v1/init-db', async (_req, res) => {
   }
 })
 
-// Debug endpoint to check database tables
+// Debug endpoint to check database tables and create SiteStats if needed
 app.get('/api/v1/debug/tables', async (_req, res) => {
   try {
+    // First, try to create SiteStats table if it doesn't exist
+    try {
+      await prisma.$executeRaw`
+        CREATE TABLE IF NOT EXISTS "SiteStats" (
+          "id" SERIAL NOT NULL,
+          "key" TEXT NOT NULL,
+          "value" TEXT NOT NULL,
+          "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          CONSTRAINT "SiteStats_pkey" PRIMARY KEY ("id")
+        )
+      `
+      
+      await prisma.$executeRaw`
+        CREATE UNIQUE INDEX IF NOT EXISTS "SiteStats_key_key" ON "SiteStats"("key")
+      `
+    } catch (createError) {
+      console.log('Table creation error (might already exist):', createError)
+    }
+    
     const tables = await prisma.$queryRaw`
       SELECT table_name 
       FROM information_schema.tables 
