@@ -1,0 +1,107 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: techblog_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Generate Prisma client
+      run: npx prisma generate
+    
+    - name: Run database migrations
+      run: NODE_ENV=test npx prisma migrate deploy
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/techblog_test
+    
+    - name: Run tests
+      run: npm test
+      env:
+        DATABASE_URL: postgresql://postgres:postgres@localhost:5432/techblog_test
+        TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/techblog_test
+    
+    - name: Run linting
+      run: npm run lint
+    
+    - name: Build application
+      run: npm run build
+    
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/lcov.info
+        flags: unittests
+        name: codecov-umbrella
+
+  deploy-test:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Deploy to Test Environment
+      run: |
+        echo "🚀 Deploying to test environment..."
+        # Add your deployment commands here (Railway, Heroku, etc.)
+        # Example for Railway:
+        # npx @railway/cli@latest deploy --environment test
+    
+    - name: Verify Test Deployment
+      run: |
+        echo "🔍 Verifying test deployment..."
+        # Add verification commands here
+        # Example: curl -f $TEST_URL/api/v1/health
+
+  deploy-production:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Deploy to Production Environment
+      run: |
+        echo "🚀 Deploying to production environment..."
+        # Add your deployment commands here
+        # Example for Railway:
+        # npx @railway/cli@latest deploy --environment production
+    
+    - name: Verify Production Deployment
+      run: |
+        echo "🔍 Verifying production deployment..."
+        # Add verification commands here
+        # Example: curl -f $PROD_URL/api/v1/health

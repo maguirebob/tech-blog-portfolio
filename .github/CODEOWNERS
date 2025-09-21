@@ -1,0 +1,19 @@
+# Global code owners
+* @bobmaguire
+
+# Database and schema files
+/prisma/ @bobmaguire
+/src/lib/prisma.ts @bobmaguire
+
+# Configuration files
+package.json @bobmaguire
+tsconfig.json @bobmaguire
+*.config.js @bobmaguire
+*.config.ts @bobmaguire
+
+# GitHub workflows
+/.github/ @bobmaguire
+
+# Documentation
+README.md @bobmaguire
+docs/ @bobmaguire
