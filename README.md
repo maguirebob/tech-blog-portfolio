@@ -2,6 +2,8 @@
 
 A modern tech blog and portfolio website built with Node.js, Express, PostgreSQL, and Prisma.
 
+📚 **Documentation**: See the [docs/](docs/) directory for complete design and architecture documentation.
+
 ## 🚀 Quick Start
 
 ### Prerequisites

@@ -1,0 +1,36 @@
+# Documentation
+
+This directory contains the design and architecture documentation for the Tech Blog & Portfolio project.
+
+## Documents
+
+### 1. Node.js Express PostgreSQL Website Architecture.md
+The foundational architecture document that defines the development conventions, workflows, and approaches used across all Node.js/Express/PostgreSQL projects. This document serves as the template for:
+
+- Development Conventions (Design-First, TDD, etc.)
+- Testing Strategies
+- Environment Management
+- Security Implementation
+- CI/CD Pipelines
+- Quality Assurance
+
+### 2. Tech Blog Portfolio Website Design.md
+The specific design document for this Tech Blog & Portfolio website implementation. This document follows all conventions from the architecture document and includes:
+
+- Project-specific requirements
+- Database schema design
+- API endpoint specifications
+- Frontend design
+- Implementation phases
+- Environment configuration
+- Task distribution
+
+## Usage
+
+- **For Development**: Reference the Tech Blog Portfolio Website Design.md for project-specific implementation details
+- **For Architecture**: Reference the Node.js Express PostgreSQL Website Architecture.md for general development conventions and workflows
+- **For New Projects**: Use the architecture document as a template for new Node.js/Express/PostgreSQL projects
+
+## Updates
+
+These documents are living documents that are updated as we learn and implement the project. Key learnings from the implementation process are captured to improve future development workflows.
