@@ -541,7 +541,7 @@ A modern task management application with real-time collaboration features.
         featured: false,
         order: 3,
         authorId: author.id
-      })
+      }),
     ])
 
   // Create project-technology relationships

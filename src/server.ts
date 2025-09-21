@@ -38,7 +38,7 @@ app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true, limit: '10mb' }))
 
 // Health check endpoint
-app.get('/api/v1/health', (req, res) => {
+app.get('/api/v1/health', (_req, res) => {
   res.json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
@@ -48,7 +48,7 @@ app.get('/api/v1/health', (req, res) => {
 })
 
 // Database health check
-app.get('/api/v1/health/db', async (req, res) => {
+app.get('/api/v1/health/db', async (_req, res) => {
   try {
     await prisma.$queryRaw`SELECT 1`
     res.json({
@@ -65,7 +65,7 @@ app.get('/api/v1/health/db', async (req, res) => {
 })
 
 // Basic API routes (will be expanded in Phase 2)
-app.get('/api/v1/stats', async (req, res) => {
+app.get('/api/v1/stats', async (_req, res) => {
   try {
     const stats = await prisma.siteStats.findMany()
     const statsObject = stats.reduce((acc, stat) => {
@@ -86,7 +86,7 @@ app.get('/api/v1/stats', async (req, res) => {
 })
 
 // 404 handler
-app.use('*', (req, res) => {
+app.use('*', (_req, res) => {
   res.status(404).json({
     success: false,
     error: 'Route not found'
@@ -94,7 +94,7 @@ app.use('*', (req, res) => {
 })
 
 // Error handling middleware
-app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error('Error:', err)
   
   res.status(500).json({
