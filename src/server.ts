@@ -87,19 +87,28 @@ app.get('/api/v1/stats', async (_req, res) => {
   }
 })
 
-// Database initialization endpoint
+// Database initialization endpoint using raw SQL
 app.post('/api/v1/init-db', async (_req, res) => {
   try {
-    const { execSync } = require('child_process')
-    const output = execSync('npx prisma db push', { 
-      encoding: 'utf8',
-      stdio: 'pipe'
-    })
-    console.log('DB push output:', output)
+    // Create SiteStats table directly
+    await prisma.$executeRaw`
+      CREATE TABLE IF NOT EXISTS "SiteStats" (
+        "id" SERIAL NOT NULL,
+        "key" TEXT NOT NULL,
+        "value" TEXT NOT NULL,
+        "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        CONSTRAINT "SiteStats_pkey" PRIMARY KEY ("id")
+      )
+    `
+    
+    // Create unique index
+    await prisma.$executeRaw`
+      CREATE UNIQUE INDEX IF NOT EXISTS "SiteStats_key_key" ON "SiteStats"("key")
+    `
+    
     res.json({
       success: true,
-      message: 'Database schema created successfully',
-      output: output
+      message: 'SiteStats table created successfully'
     })
   } catch (error) {
     console.error('DB init error:', error)
