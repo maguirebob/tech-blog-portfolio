@@ -1818,4 +1818,158 @@ Prisma provides `$queryRaw` and `$executeRaw` for cases where:
 
 ---
 
+## Implementation Learnings
+
+### Critical Deployment Issues and Solutions
+
+#### 1. Railway Deployment Challenges
+
+**Problem**: Railway deployments failing due to multiple configuration issues.
+
+**Root Causes Identified**:
+- **Branch Mismatch**: Working on `develop` branch while Railway deploys from `main`
+- **Missing Migrations**: `prisma/migrations` directory excluded by `.gitignore`
+- **Incorrect Nixpacks Configuration**: `nixpacks.toml` had wrong build commands
+
+**Solutions**:
+- Always merge `develop` to `main` before deployment
+- Ensure `prisma/migrations` is included in version control
+- Verify `nixpacks.toml` configuration matches actual build process
+
+#### 2. TypeScript Compilation Issues
+
+**Problem**: Server running old compiled code despite source changes.
+
+**Root Cause**: TypeScript source files in `src/` not being rebuilt to `dist/` before server restart.
+
+**Solution**: Always run `npm run build` after making TypeScript changes and restart server.
+
+#### 3. Database Schema Synchronization
+
+**Problem**: Test environment missing required tables (categories) for article creation.
+
+**Root Cause**: Seed scripts only created basic stats, not relational data.
+
+**Solution**: Create dedicated seed endpoints for different data types (`/api/v1/seed-categories`).
+
+#### 4. Environment Variable Access
+
+**Problem**: TypeScript errors when accessing `process.env` properties with dot notation.
+
+**Root Cause**: `noPropertyAccessFromIndexSignature` TypeScript setting was `true`.
+
+**Solution**: Set `noPropertyAccessFromIndexSignature: false` in `tsconfig.json`.
+
+### Development Workflow Improvements
+
+#### 1. Build Process Validation
+
+**Learning**: Always validate the complete build process locally before deployment:
+```bash
+npm run build && npm start
+```
+
+#### 2. Database Seeding Strategy
+
+**Learning**: Create granular seed endpoints for different data types:
+- `/api/v1/seed` - Basic site statistics
+- `/api/v1/seed-categories` - Categories and taxonomies
+- `/api/v1/seed-content` - Articles and projects
+
+#### 3. Error Handling in Controllers
+
+**Learning**: Use explicit `Promise<void>` return types and proper error handling:
+```typescript
+export const createArticle = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+  try {
+    // Implementation
+    res.status(201).json({ success: true, data: article });
+  } catch (error) {
+    console.error('Create article error:', error);
+    res.status(500).json({ success: false, error: 'Failed to create article' });
+  }
+};
+```
+
+#### 4. Authentication Middleware Debugging
+
+**Learning**: Add debug logging to authentication middleware for troubleshooting:
+```typescript
+console.log('User authenticated:', req.user); // Debug log
+```
+
+### Railway-Specific Learnings
+
+#### 1. Manual Deployment Process
+
+**Learning**: Railway doesn't auto-deploy by default. Use `railway up` to trigger deployments.
+
+#### 2. Database Connection Issues
+
+**Learning**: Railway internal database URLs (`postgres.railway.internal:5432`) are not accessible from local development.
+
+#### 3. Environment Variable Management
+
+**Learning**: Use Railway CLI for environment variable management:
+```bash
+railway variables --set "KEY=value" --service project-name
+```
+
+### Testing Strategy Refinements
+
+#### 1. Local vs Remote Testing
+
+**Learning**: Test both locally and on deployed environment to catch deployment-specific issues.
+
+#### 2. Database State Management
+
+**Learning**: Test environment needs proper data seeding before testing API endpoints.
+
+#### 3. API Endpoint Validation
+
+**Learning**: Test complete user flows (register → login → create content) rather than individual endpoints.
+
+### Code Quality Improvements
+
+#### 1. TypeScript Configuration
+
+**Learning**: Balance strictness with practicality:
+- `noPropertyAccessFromIndexSignature: false` for environment variables
+- `noUnusedParameters: true` but prefix unused params with `_`
+
+#### 2. Import Management
+
+**Learning**: Remove unused imports to prevent TypeScript compilation errors.
+
+#### 3. Error Message Consistency
+
+**Learning**: Use consistent error response format across all endpoints:
+```typescript
+{
+  success: false,
+  error: 'Human-readable error message',
+  details?: 'Technical details for debugging'
+}
+```
+
+### Future Considerations
+
+#### 1. Automated Testing
+
+**Priority**: Implement comprehensive API tests to catch issues before deployment.
+
+#### 2. CI/CD Pipeline
+
+**Priority**: Set up GitHub Actions for automated testing and deployment.
+
+#### 3. Database Migration Strategy
+
+**Priority**: Implement proper migration rollback procedures for production.
+
+#### 4. Monitoring and Logging
+
+**Priority**: Add structured logging and monitoring for production environments.
+
+---
+
 This architecture document provides a comprehensive foundation for building and managing a Node.js/Express website with PostgreSQL database across three environments using Prisma ORM. The conventions ensure consistent, high-quality development with proper planning, testing, and implementation practices while maintaining security and performance standards.
