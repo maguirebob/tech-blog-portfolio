@@ -21,7 +21,7 @@
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
     "db:migrate:reset": "prisma migrate reset",
-    "db:seed": "ts-node prisma/simple-seed.ts",
+    "db:seed": "ts-node prisma/minimal-seed.ts",
     "db:studio": "prisma studio",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
