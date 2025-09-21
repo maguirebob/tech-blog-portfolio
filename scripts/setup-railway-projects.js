@@ -56,11 +56,11 @@ function createProject(projectName) {
   return true;
 }
 
-function linkToProject(projectName) {
-  log(`\n🔗 Linking to project: ${projectName}`, 'cyan');
+function linkToProject(projectName, environment = 'test') {
+  log(`\n🔗 Linking to project: ${projectName} (${environment})`, 'cyan');
   
-  // Try to link to project
-  const linkResult = execCommand(`railway link ${projectName}`, `Linking to ${projectName}`);
+  // Try to link to project using --project and --environment flags
+  const linkResult = execCommand(`railway link --project ${projectName} --environment ${environment}`, `Linking to ${projectName}`);
   if (!linkResult.success) {
     log(`❌ Failed to link to ${projectName}`, 'red');
     return false;
@@ -116,9 +116,9 @@ function main() {
   // For now, let's use the existing project and set up environments
   log('\n🔧 Setting up existing "techblog" project...', 'cyan');
   
-  // Link to existing project
-  if (!linkToProject('techblog')) {
-    log('❌ Failed to link to techblog project', 'red');
+  // Link to existing project for test environment
+  if (!linkToProject('techblog', 'test')) {
+    log('❌ Failed to link to techblog project for test environment', 'red');
     process.exit(1);
   }
 
@@ -128,11 +128,10 @@ function main() {
     log('❌ Failed to set up test environment', 'red');
   }
 
-  // Set up production environment  
-  log('\n🏭 Setting up PRODUCTION environment...', 'cyan');
-  if (!setEnvironmentVariables('production')) {
-    log('❌ Failed to set up production environment', 'red');
-  }
+  // Note: For production, you would need to link again with production environment
+  log('\n📝 Note: For production environment, you would need to:', 'yellow');
+  log('1. Run: railway link --project techblog --environment production', 'blue');
+  log('2. Set production environment variables', 'blue');
 
   log('\n🎉 Railway project setup complete!', 'green');
   log('\nNext steps:', 'yellow');
