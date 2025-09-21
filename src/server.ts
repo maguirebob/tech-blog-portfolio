@@ -37,6 +37,16 @@ app.use('/api', limiter)
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true, limit: '10mb' }))
 
+// Root endpoint
+app.get('/', (_req, res) => {
+  res.json({
+    message: 'Tech Blog & Portfolio API',
+    status: 'running',
+    environment: process.env.NODE_ENV || 'development',
+    version: '1.0.0'
+  })
+})
+
 // Health check endpoint
 app.get('/api/v1/health', (_req, res) => {
   res.json({
