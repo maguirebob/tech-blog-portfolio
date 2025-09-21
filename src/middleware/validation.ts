@@ -33,3 +33,11 @@ export const validateId = [
 export const validatePagination = [
   handleValidationErrors
 ]
+
+export const validateCreateProject = [
+  handleValidationErrors
+]
+
+export const validateUpdateProject = [
+  handleValidationErrors
+]

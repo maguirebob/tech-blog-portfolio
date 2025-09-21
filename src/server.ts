@@ -7,6 +7,7 @@ import dotenv from 'dotenv'
 import { prisma } from './lib/prisma'
 import userRoutes from './routes/userRoutes'
 import articleRoutes from './routes/articleRoutes'
+import projectRoutes from './routes/projectRoutes'
 
 // Load environment variables
 dotenv.config()
@@ -79,6 +80,7 @@ app.get('/api/v1/health/db', async (_req, res) => {
 // Mount API routes
 app.use('/api/v1/users', userRoutes)
 app.use('/api/v1/articles', articleRoutes)
+app.use('/api/v1/projects', projectRoutes)
 
 // Basic API routes (will be expanded in Phase 2)
 app.get('/api/v1/stats', async (_req, res) => {
@@ -263,6 +265,72 @@ app.post('/api/v1/seed-categories', async (_req, res) => {
   }
 });
 
+app.post('/api/v1/seed-technologies', async (_req, res) => {
+  try {
+    const technologies = [
+      {
+        name: 'Node.js',
+        slug: 'nodejs',
+        icon: 'fab fa-node-js',
+        color: '#68A063'
+      },
+      {
+        name: 'Express.js',
+        slug: 'expressjs',
+        icon: 'fas fa-server',
+        color: '#000000'
+      },
+      {
+        name: 'PostgreSQL',
+        slug: 'postgresql',
+        icon: 'fas fa-database',
+        color: '#336791'
+      },
+      {
+        name: 'Prisma',
+        slug: 'prisma',
+        icon: 'fas fa-cube',
+        color: '#2D3748'
+      },
+      {
+        name: 'TypeScript',
+        slug: 'typescript',
+        icon: 'fab fa-js-square',
+        color: '#3178C6'
+      },
+      {
+        name: 'React',
+        slug: 'react',
+        icon: 'fab fa-react',
+        color: '#61DAFB'
+      }
+    ];
+
+    const createdTechnologies = [];
+    for (const techData of technologies) {
+      const technology = await prisma.technology.upsert({
+        where: { slug: techData.slug },
+        update: {},
+        create: techData
+      });
+      createdTechnologies.push(technology);
+    }
+
+    res.json({
+      success: true,
+      message: 'Technologies created successfully',
+      data: createdTechnologies
+    });
+  } catch (error) {
+    console.error('Technologies seed error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to create technologies',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
 // 404 handler
 app.use('*', (_req, res) => {
   res.status(404).json({
@@ -294,10 +362,15 @@ process.on('SIGTERM', async () => {
   process.exit(0)
 })
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`)
-  console.log(`📊 Environment: ${process.env.NODE_ENV}`)
-  console.log(`🔗 Health check: http://localhost:${PORT}/api/v1/health`)
-  console.log(`📈 Stats endpoint: http://localhost:${PORT}/api/v1/stats`)
-})
+// Export app for testing
+export { app }
+
+// Start server only if not in test environment
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`)
+    console.log(`📊 Environment: ${process.env.NODE_ENV}`)
+    console.log(`🔗 Health check: http://localhost:${PORT}/api/v1/health`)
+    console.log(`📈 Stats endpoint: http://localhost:${PORT}/api/v1/stats`)
+  })
+}

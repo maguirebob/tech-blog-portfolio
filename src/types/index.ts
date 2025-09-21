@@ -79,11 +79,11 @@ export interface CreateProjectRequest {
   description: string
   content?: string
   imageUrl?: string
-  projectUrl?: string
+  demoUrl?: string
   githubUrl?: string
   technologyIds?: number[]
   featured?: boolean
-  status?: 'draft' | 'published' | 'archived'
+  status?: 'PLANNING' | 'IN_PROGRESS' | 'COMPLETED' | 'ON_HOLD'
 }
 
 export interface UpdateProjectRequest {
@@ -91,11 +91,11 @@ export interface UpdateProjectRequest {
   description?: string
   content?: string
   imageUrl?: string
-  projectUrl?: string
+  demoUrl?: string
   githubUrl?: string
   technologyIds?: number[]
   featured?: boolean
-  status?: 'draft' | 'published' | 'archived'
+  status?: 'PLANNING' | 'IN_PROGRESS' | 'COMPLETED' | 'ON_HOLD'
 }
 
 export interface ProjectWithRelations extends Project {
