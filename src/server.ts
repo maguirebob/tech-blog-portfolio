@@ -213,6 +213,56 @@ app.post('/api/v1/seed', async (_req, res) => {
   }
 })
 
+app.post('/api/v1/seed-categories', async (_req, res) => {
+  try {
+    const categories = [
+      {
+        name: 'Technology',
+        slug: 'technology',
+        description: 'Articles about technology, programming, and software development'
+      },
+      {
+        name: 'Web Development',
+        slug: 'web-development',
+        description: 'Frontend and backend web development topics'
+      },
+      {
+        name: 'Database',
+        slug: 'database',
+        description: 'Database design, optimization, and management'
+      },
+      {
+        name: 'DevOps',
+        slug: 'devops',
+        description: 'Development operations, deployment, and infrastructure'
+      }
+    ];
+
+    const createdCategories = [];
+    for (const categoryData of categories) {
+      const category = await prisma.category.upsert({
+        where: { slug: categoryData.slug },
+        update: {},
+        create: categoryData
+      });
+      createdCategories.push(category);
+    }
+
+    res.json({
+      success: true,
+      message: 'Categories created successfully',
+      data: createdCategories
+    });
+  } catch (error) {
+    console.error('Categories seed error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to create categories',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
+
 // 404 handler
 app.use('*', (_req, res) => {
   res.status(404).json({
