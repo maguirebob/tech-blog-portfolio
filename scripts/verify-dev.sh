@@ -28,8 +28,8 @@ echo "✅ PostgreSQL is installed: $(psql --version | head -n1)"
 
 # Check if .env file exists
 if [ ! -f .env ]; then
-    echo "❌ .env file not found. Please copy env.development to .env and configure it."
-    echo "Run: cp env.development .env"
+    echo "❌ .env file not found. Please copy .env.dev to .env and configure it."
+    echo "Run: cp .env.dev .env"
     exit 1
 fi
 

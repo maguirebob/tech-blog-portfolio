@@ -34,15 +34,15 @@ A modern tech blog and portfolio website built with Node.js, Express, PostgreSQL
 4. **Setup environment variables**
    ```bash
    # For development
-   cp env.development .env
+   cp .env.dev .env
    # Edit .env with your database credentials
    
    # For test environment
-   cp env.test .env.test
+   cp .env.test .env.test
    # Edit .env.test with your test database credentials
    
    # For production (when deploying)
-   cp env.production .env.production
+   cp .env.production .env.production
    # Edit .env.production with your production credentials
    ```
 
