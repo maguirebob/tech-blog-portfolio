@@ -85,6 +85,40 @@ app.get('/api/v1/stats', async (_req, res) => {
   }
 })
 
+// Seed endpoint for development/testing
+app.post('/api/v1/seed', async (_req, res) => {
+  try {
+    // Create basic site statistics
+    await prisma.siteStats.upsert({
+      where: { key: 'total_articles' },
+      update: { value: '1' },
+      create: { key: 'total_articles', value: '1' }
+    })
+
+    await prisma.siteStats.upsert({
+      where: { key: 'total_projects' },
+      update: { value: '1' },
+      create: { key: 'total_projects', value: '1' }
+    })
+
+    await prisma.siteStats.upsert({
+      where: { key: 'total_users' },
+      update: { value: '2' },
+      create: { key: 'total_users', value: '2' }
+    })
+
+    res.json({
+      success: true,
+      message: 'Database seeded successfully'
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to seed database'
+    })
+  }
+})
+
 // 404 handler
 app.use('*', (_req, res) => {
   res.status(404).json({
