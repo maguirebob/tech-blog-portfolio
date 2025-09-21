@@ -89,6 +89,7 @@
       "<rootDir>/test/setup.ts"
     ],
     "testMatch": [
+      "**/test/**/*.test.ts",
       "**/__tests__/**/*.test.ts"
     ],
     "collectCoverageFrom": [

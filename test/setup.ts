@@ -4,7 +4,7 @@ import { execSync } from 'child_process'
 const prisma = new PrismaClient({
   datasources: {
     db: {
-      url: process.env.TEST_DATABASE_URL || 'postgresql://test_user:test_password@localhost:5432/techblog_test'
+      url: process.env.DATABASE_URL || 'postgresql://test_user:test_password@localhost:5432/techblog_test'
     }
   },
   log: ['error']
@@ -13,7 +13,7 @@ const prisma = new PrismaClient({
 beforeAll(async () => {
   // Reset and migrate test database
   try {
-    execSync('NODE_ENV=test npx prisma migrate reset --force', { stdio: 'inherit' })
+    execSync('NODE_ENV=test npx prisma migrate reset --force --skip-seed', { stdio: 'inherit' })
     execSync('NODE_ENV=test npx prisma migrate deploy', { stdio: 'inherit' })
   } catch (error) {
     console.error('Failed to setup test database:', error)
