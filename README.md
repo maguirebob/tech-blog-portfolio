@@ -33,8 +33,17 @@ A modern tech blog and portfolio website built with Node.js, Express, PostgreSQL
 
 4. **Setup environment variables**
    ```bash
-   cp env.example .env
+   # For development
+   cp env.development .env
    # Edit .env with your database credentials
+   
+   # For test environment
+   cp env.test .env.test
+   # Edit .env.test with your test database credentials
+   
+   # For production (when deploying)
+   cp env.production .env.production
+   # Edit .env.production with your production credentials
    ```
 
 5. **Setup database**
