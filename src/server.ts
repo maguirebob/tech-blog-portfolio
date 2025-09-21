@@ -91,10 +91,15 @@ app.get('/api/v1/stats', async (_req, res) => {
 app.post('/api/v1/migrate', async (_req, res) => {
   try {
     const { execSync } = require('child_process')
-    execSync('npx prisma migrate deploy', { stdio: 'inherit' })
+    const output = execSync('npx prisma migrate deploy', { 
+      encoding: 'utf8',
+      stdio: 'pipe'
+    })
+    console.log('Migration output:', output)
     res.json({
       success: true,
-      message: 'Database migrations completed successfully'
+      message: 'Database migrations completed successfully',
+      output: output
     })
   } catch (error) {
     console.error('Migration error:', error)
