@@ -87,6 +87,25 @@ app.get('/api/v1/stats', async (_req, res) => {
   }
 })
 
+// Migration endpoint for development/testing
+app.post('/api/v1/migrate', async (_req, res) => {
+  try {
+    const { execSync } = require('child_process')
+    execSync('npx prisma migrate deploy', { stdio: 'inherit' })
+    res.json({
+      success: true,
+      message: 'Database migrations completed successfully'
+    })
+  } catch (error) {
+    console.error('Migration error:', error)
+    res.status(500).json({
+      success: false,
+      error: 'Failed to run migrations',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    })
+  }
+})
+
 // Seed endpoint for development/testing
 app.post('/api/v1/seed', async (_req, res) => {
   try {
