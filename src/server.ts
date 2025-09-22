@@ -55,14 +55,9 @@ app.get('/health', (_req, res) => {
   res.status(200).json({ status: 'ok' })
 })
 
-// Health check endpoint
+// Health check endpoint (simplified for Railway)
 app.get('/api/v1/health', (_req, res) => {
-  res.json({
-    status: 'healthy',
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-    environment: process.env.NODE_ENV
-  })
+  res.status(200).json({ status: 'ok' })
 })
 
 // Database health check
@@ -372,10 +367,18 @@ export { app }
 
 // Start server only if not in test environment
 if (process.env.NODE_ENV !== 'test') {
-  app.listen(Number(PORT), '0.0.0.0', () => {
-    console.log(`🚀 Server running on port ${PORT}`)
-    console.log(`📊 Environment: ${process.env.NODE_ENV}`)
+  console.log('🚀 Starting server...')
+  console.log(`📊 Environment: ${process.env.NODE_ENV}`)
+  console.log(`🔗 Port: ${PORT}`)
+  
+  const server = app.listen(Number(PORT), '0.0.0.0', () => {
+    console.log(`✅ Server successfully started on port ${PORT}`)
     console.log(`🔗 Health check: http://0.0.0.0:${PORT}/api/v1/health`)
     console.log(`📈 Stats endpoint: http://0.0.0.0:${PORT}/api/v1/stats`)
+  })
+  
+  // Handle server errors
+  server.on('error', (err) => {
+    console.error('❌ Server error:', err)
   })
 }
