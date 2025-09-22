@@ -15,6 +15,7 @@ September 2025
 ### 8. [Security Implementation](#security-implementation)
 ### 9. [Environment Configuration](#environment-configuration)
 ### 10. [Performance Considerations](#performance-considerations)
+### 11. [Learning Enforcement System](#learning-enforcement-system)
 
 ---
 
