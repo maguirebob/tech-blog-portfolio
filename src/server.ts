@@ -395,18 +395,37 @@ export { app }
 
 // Start server only if not in test environment
 if (process.env.NODE_ENV !== 'test') {
-  console.log('🚀 Starting server...')
-  console.log(`📊 Environment: ${process.env.NODE_ENV}`)
-  console.log(`🔗 Port: ${PORT}`)
-  
-  const server = app.listen(Number(PORT), '0.0.0.0', () => {
-    console.log(`✅ Server successfully started on port ${PORT}`)
-    console.log(`🔗 Health check: http://0.0.0.0:${PORT}/api/v1/health`)
-    console.log(`📈 Stats endpoint: http://0.0.0.0:${PORT}/api/v1/stats`)
-  })
-  
-  // Handle server errors
-  server.on('error', (err) => {
-    console.error('❌ Server error:', err)
-  })
+  try {
+    console.log('🚀 Starting server...')
+    console.log(`📊 Environment: ${process.env.NODE_ENV}`)
+    console.log(`🔗 Port: ${PORT}`)
+    console.log(`🔗 Host: 0.0.0.0`)
+    
+    const server = app.listen(Number(PORT), '0.0.0.0', () => {
+      console.log(`✅ Server successfully started on port ${PORT}`)
+      console.log(`🔗 Health check: http://0.0.0.0:${PORT}/api/v1/health`)
+      console.log(`📈 Stats endpoint: http://0.0.0.0:${PORT}/api/v1/stats`)
+    })
+    
+    // Handle server errors
+    server.on('error', (err) => {
+      console.error('❌ Server error:', err)
+      process.exit(1)
+    })
+    
+    // Handle process errors
+    process.on('uncaughtException', (err) => {
+      console.error('❌ Uncaught Exception:', err)
+      process.exit(1)
+    })
+    
+    process.on('unhandledRejection', (reason, promise) => {
+      console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason)
+      process.exit(1)
+    })
+    
+  } catch (error) {
+    console.error('❌ Failed to start server:', error)
+    process.exit(1)
+  }
 }
