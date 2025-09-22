@@ -50,29 +50,57 @@ app.get('/', (_req, res) => {
   })
 })
 
-// Simple healthcheck for Railway
+// Lightweight healthcheck endpoints for Railway (always return 200 OK)
 app.get('/health', (_req, res) => {
-  res.status(200).json({ status: 'ok' })
+  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() })
 })
 
-// Health check endpoint (simplified for Railway)
 app.get('/api/v1/health', (_req, res) => {
-  res.status(200).json({ status: 'ok' })
+  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() })
 })
 
-// Database health check
+// Server status endpoint (no database dependency)
+app.get('/api/v1/status', (_req, res) => {
+  res.json({
+    status: 'running',
+    environment: process.env.NODE_ENV || 'development',
+    version: '1.0.0',
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+    memory: process.memoryUsage(),
+    platform: process.platform,
+    nodeVersion: process.version
+  })
+})
+
+// Comprehensive database health check
 app.get('/api/v1/health/db', async (_req, res) => {
   try {
+    // Test basic database connectivity
     await prisma.$queryRaw`SELECT 1`
+    
+    // Test if we can query a real table
+    const userCount = await prisma.user.count()
+    const articleCount = await prisma.article.count()
+    const projectCount = await prisma.project.count()
+    
     res.json({
       status: 'healthy',
-      database: 'connected'
+      database: 'connected',
+      tables: {
+        users: userCount,
+        articles: articleCount,
+        projects: projectCount
+      },
+      timestamp: new Date().toISOString()
     })
   } catch (error) {
+    console.error('Database health check failed:', error)
     res.status(503).json({
       status: 'unhealthy',
       database: 'disconnected',
-      error: error instanceof Error ? error.message : 'Unknown error'
+      error: error instanceof Error ? error.message : 'Unknown error',
+      timestamp: new Date().toISOString()
     })
   }
 })
