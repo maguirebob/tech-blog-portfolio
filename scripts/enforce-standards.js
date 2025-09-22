@@ -86,7 +86,7 @@ class StandardsEnforcer {
       'await prisma.$connect()',
       'app.listen(PORT, \'0.0.0.0\'',
       '/api/v1/health',
-      'Number(PORT)'
+      'Number(process.env.PORT)'
     ];
 
     return this.checkFileContent(serverPath, mandatoryPatterns, 'Server error handling');
@@ -105,9 +105,10 @@ class StandardsEnforcer {
     const content = fs.readFileSync(serverPath, 'utf8');
     
     // Check for lightweight health check
-    if (content.includes('app.get(\'/api/v1/health\'') && 
-        !content.includes('await prisma') && 
-        content.includes('res.status(200)')) {
+    const healthEndpointMatch = content.match(/app\.get\('\/api\/v1\/health'[^}]+}/);
+    if (healthEndpointMatch && 
+        !healthEndpointMatch[0].includes('await prisma') && 
+        healthEndpointMatch[0].includes('res.status(200)')) {
       this.passed.push('✅ Lightweight health check endpoint found');
     } else {
       this.errors.push('❌ Lightweight health check endpoint missing or incorrect');
