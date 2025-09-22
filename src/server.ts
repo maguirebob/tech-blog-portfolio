@@ -120,3 +120,6 @@ app.use((err: Error, _req: express.Request, res: express.Response, _next: expres
     process.exit(1);
   }
 })();
+
+// Export app for testing
+export { app };
