@@ -50,6 +50,11 @@ app.get('/', (_req, res) => {
   })
 })
 
+// Simple healthcheck for Railway
+app.get('/health', (_req, res) => {
+  res.status(200).json({ status: 'ok' })
+})
+
 // Health check endpoint
 app.get('/api/v1/health', (_req, res) => {
   res.json({
@@ -367,10 +372,10 @@ export { app }
 
 // Start server only if not in test environment
 if (process.env.NODE_ENV !== 'test') {
-  app.listen(PORT, () => {
+  app.listen(Number(PORT), '0.0.0.0', () => {
     console.log(`🚀 Server running on port ${PORT}`)
     console.log(`📊 Environment: ${process.env.NODE_ENV}`)
-    console.log(`🔗 Health check: http://localhost:${PORT}/api/v1/health`)
-    console.log(`📈 Stats endpoint: http://localhost:${PORT}/api/v1/stats`)
+    console.log(`🔗 Health check: http://0.0.0.0:${PORT}/api/v1/health`)
+    console.log(`📈 Stats endpoint: http://0.0.0.0:${PORT}/api/v1/stats`)
   })
 }
