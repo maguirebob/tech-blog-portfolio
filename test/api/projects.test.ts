@@ -1,6 +1,5 @@
 import request from 'supertest'
 import { app } from '../../src/server'
-import '../../test/setup-api'
 
 describe('Projects API', () => {
   let authToken: string

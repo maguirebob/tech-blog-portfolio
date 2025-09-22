@@ -86,7 +86,7 @@
     "preset": "ts-jest",
     "testEnvironment": "node",
     "setupFilesAfterEnv": [
-      "<rootDir>/test/setup.ts"
+      "<rootDir>/test/setup-api.ts"
     ],
     "testMatch": [
       "**/test/**/*.test.ts",
