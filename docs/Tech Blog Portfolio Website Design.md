@@ -20,7 +20,7 @@ September 2025
 
 ## Purpose
 
-This design document outlines the creation of a **Tech Blog & Portfolio Website** that follows the Node.js Express PostgreSQL Website Architecture conventions. The website will showcase blog articles, portfolio projects, and user management features while demonstrating all the development workflows and approaches specified in the architecture document.
+This design document outlines the creation of a **Tech Blog & Portfolio Website** that follows the Node.js Express PostgreSQL Website Architecture conventions. The website will showcase blog articles, portfolio projects, and user management features while demonstrating all the development workflows and approaches specified in the architecture document.  The purpose of the site is to be a testing ground for managing deployments and migrations.
 
 ### Website Concept
 A modern, responsive tech blog and portfolio website featuring:
@@ -1808,6 +1808,86 @@ The `tsconfig.json` must be configured to handle environment variables properly:
 2. Each phase builds on the previous one
 3. Bob's testing and approval required before proceeding
 4. Clear communication about any issues or changes needed
+
+---
+
+## Implementation Learnings
+
+### 🚀 **Server Startup & Error Handling**
+
+**Critical Learning**: Railway deployment requires robust error handling and proper async startup patterns.
+
+#### **Key Improvements Made:**
+1. **Global Error Handlers**: Added comprehensive error handling for uncaught exceptions and unhandled rejections
+2. **Async Startup Pattern**: Used immediately invoked async function (IIFE) for proper database connection before server startup
+3. **Explicit Database Connection**: Call `prisma.$connect()` before starting the server to ensure database is ready
+4. **Proper Host Binding**: Use `0.0.0.0` instead of `localhost` for Railway deployment compatibility
+5. **Lightweight Health Checks**: Separate ultra-lightweight health endpoints (`/api/v1/health`) from database-dependent ones (`/api/v1/health/db`)
+
+#### **Server.ts Structure:**
+```typescript
+// Global crash handlers at the top
+process.on("uncaughtException", (err) => {
+  console.error("❌ Uncaught Exception:", err);
+  process.exit(1);
+});
+
+// Async startup pattern
+(async () => {
+  try {
+    await prisma.$connect();
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+    });
+  } catch (err) {
+    console.error("❌ Fatal error starting server:", err);
+    process.exit(1);
+  }
+})();
+```
+
+### 🔧 **Railway Deployment Specifics**
+
+**Critical Learning**: Railway's healthcheck system requires specific configurations and error handling patterns.
+
+#### **Healthcheck Configuration:**
+- **Lightweight Endpoints**: Health checks must return 200 OK without database dependencies
+- **Timeout Settings**: Increased healthcheck timeout to 30 seconds
+- **Multiple Endpoints**: Provide both `/health` and `/api/v1/health` for flexibility
+- **Database Health**: Separate `/api/v1/health/db` for comprehensive database testing
+
+#### **Deployment Issues Resolved:**
+1. **Silent Failures**: Added comprehensive logging to identify startup issues
+2. **Port Binding**: Fixed host binding for Railway's container environment
+3. **Error Visibility**: Added process.exit(1) to make failures visible in logs
+4. **Database Timing**: Ensure database connection before server startup
+
+### 📊 **API Testing & Verification**
+
+**Learning**: Comprehensive API testing requires proper test database isolation and unique test data.
+
+#### **Test Configuration:**
+- **Unique Test Data**: Use timestamps to prevent username/email conflicts
+- **Test Database**: Run tests against development database for simplicity
+- **Proper Cleanup**: Comment out cleanup during development to avoid Prisma consent issues
+- **Test Isolation**: Each test uses unique identifiers to prevent interference
+
+### 🛠️ **Development Workflow Improvements**
+
+**Learning**: The development process benefits from clear separation of concerns and systematic debugging.
+
+#### **Debugging Strategy:**
+1. **Local Testing First**: Always test locally before deploying
+2. **Incremental Deployment**: Test each component individually
+3. **Log Analysis**: Use comprehensive logging to identify issues
+4. **Error Handling**: Implement proper error handling at every level
+
+#### **Deployment Process:**
+1. **Build Verification**: Ensure TypeScript compilation succeeds
+2. **Local Testing**: Test all endpoints locally
+3. **Incremental Deployment**: Deploy and test each change
+4. **Health Check Verification**: Verify all health endpoints work
+5. **API Testing**: Test all API endpoints after deployment
 
 ---
 

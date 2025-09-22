@@ -1,0 +1,44 @@
+name: Standards Enforcement Check
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  standards-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run standards check
+      run: npm run standards:check
+      
+    - name: Run tests
+      run: npm test
+      
+    - name: Build project
+      run: npm run build
+      
+    - name: Check for TypeScript errors
+      run: npx tsc --noEmit
+      
+    - name: Verify health check endpoints
+      run: |
+        npm start &
+        sleep 10
+        curl -f http://localhost:3000/api/v1/health || exit 1
+        curl -f http://localhost:3000/api/v1/health/db || exit 1
+        pkill -f "node dist/server.js"

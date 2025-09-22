@@ -28,7 +28,9 @@
     "format": "prettier --write src/**/*.ts",
     "verify:dev": "./scripts/verify-dev.sh",
     "verify:test": "./scripts/verify-test.sh",
-    "verify:prod": "./scripts/verify-prod.sh"
+    "verify:prod": "./scripts/verify-prod.sh",
+    "standards:check": "node scripts/enforce-standards.js",
+    "predeploy": "npm run standards:check && npm run build && npm test"
   },
   "keywords": [
     "nodejs",

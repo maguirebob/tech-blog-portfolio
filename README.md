@@ -6,6 +6,26 @@ A modern tech blog and portfolio website built with Node.js, Express, PostgreSQL
 
 🚀 **Deployment**: See [docs/RAILWAY_DEPLOYMENT.md](docs/RAILWAY_DEPLOYMENT.md) for Railway deployment instructions.
 
+🛡️ **Standards**: See [docs/DEVELOPMENT_STANDARDS.md](docs/DEVELOPMENT_STANDARDS.md) for mandatory development standards and best practices.
+
+## 🚨 **CRITICAL: Standards Enforcement**
+
+This project enforces mandatory development standards learned from deployment issues. **All deployments must pass standards checks.**
+
+### **Pre-Deployment Requirements**
+```bash
+# Run standards check (MANDATORY)
+npm run standards:check
+
+# Run pre-deployment checks (includes standards check)
+npm run predeploy
+```
+
+### **Standards Documentation**
+- [Development Standards](docs/DEVELOPMENT_STANDARDS.md) - Mandatory practices
+- [Project Template](docs/PROJECT_TEMPLATE.md) - Template for new projects
+- [Code Review Checklist](docs/CODE_REVIEW_CHECKLIST.md) - Review requirements
+
 ## 🚀 Quick Start
 
 ### Prerequisites
