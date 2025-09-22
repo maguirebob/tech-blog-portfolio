@@ -1891,6 +1891,97 @@ process.on("uncaughtException", (err) => {
 
 ---
 
+## Learning Enforcement System
+
+### 🎯 **Overview**
+
+To ensure all learnings from this project are preserved and applied to future projects, a comprehensive learning enforcement system has been implemented.
+
+### 🛡️ **Components of the Enforcement System**
+
+#### **1. Development Standards Document** (`docs/DEVELOPMENT_STANDARDS.md`)
+- **Mandatory practices** for server startup, error handling, and deployment
+- **Code examples** showing exactly what must be implemented
+- **Common pitfalls** to avoid
+- **Reference to all critical learnings**
+
+#### **2. Project Template** (`docs/PROJECT_TEMPLATE.md`)
+- **Complete template** for new Node.js Express PostgreSQL projects
+- **Required file structure** and dependencies
+- **Server.ts template** with all mandatory patterns
+- **Quality assurance checklist**
+
+#### **3. Code Review Checklist** (`docs/CODE_REVIEW_CHECKLIST.md`)
+- **Pre-deployment review** requirements
+- **Mandatory items** that cannot be skipped
+- **Deployment blockers** that prevent deployment
+- **Step-by-step review process**
+
+#### **4. Automated Standards Enforcement**
+- **`scripts/enforce-standards.js`** - Automated compliance checking script
+- **`npm run standards:check`** - Manual standards verification command
+- **`npm run predeploy`** - Pre-deployment checks including standards
+- **GitHub Actions workflow** - CI/CD enforcement in deployment pipeline
+
+#### **5. Documentation Integration**
+- **Updated README.md** with standards information
+- **Clear instructions** for running standards checks
+- **Links to all standards documents**
+
+### 🚀 **How the Enforcement System Works**
+
+#### **For Future Projects:**
+1. **Use the Project Template** - Copy the template structure
+2. **Follow Development Standards** - Implement mandatory patterns
+3. **Run Standards Check** - `npm run standards:check`
+4. **Deploy with Confidence** - `npm run predeploy`
+
+#### **For Code Reviews:**
+1. **Use the Checklist** - Follow the code review checklist
+2. **Automated Checks** - GitHub Actions runs standards checks
+3. **Manual Verification** - Review mandatory items
+4. **Approve Only if Compliant** - Block deployment if standards not met
+
+#### **For Deployments:**
+1. **Pre-deployment Check** - `npm run predeploy` runs all checks
+2. **Standards Enforcement** - Script blocks deployment if standards not met
+3. **CI/CD Integration** - GitHub Actions enforces standards automatically
+4. **Documentation** - All learnings are documented and accessible
+
+### 🎯 **Key Benefits of the Enforcement System**
+
+- **Prevents Regression** - Ensures deployment issues don't happen again
+- **Automated Enforcement** - No reliance on human memory
+- **Clear Documentation** - All learnings are captured and accessible
+- **Template for Future** - Easy to apply learnings to new projects
+- **CI/CD Integration** - Standards enforced automatically in deployment pipeline
+
+### 📋 **Enforcement Commands**
+
+```bash
+# Check standards compliance
+npm run standards:check
+
+# Run pre-deployment checks (includes standards check)
+npm run predeploy
+
+# Manual verification of health endpoints
+npm start
+curl http://localhost:3000/api/v1/health
+curl http://localhost:3000/api/v1/health/db
+```
+
+### 📚 **Reference Documents**
+
+- [Development Standards](DEVELOPMENT_STANDARDS.md) - Mandatory practices
+- [Project Template](PROJECT_TEMPLATE.md) - Template for new projects
+- [Code Review Checklist](CODE_REVIEW_CHECKLIST.md) - Review requirements
+- [Railway Deployment Guide](RAILWAY_DEPLOYMENT.md) - Deployment-specific guidance
+
+---
+
 This design document provides a comprehensive foundation for building the Tech Blog & Portfolio Website following all the conventions and workflows specified in the Node.js Express PostgreSQL Website Architecture. The design emphasizes test-driven development, security best practices, and modern web development patterns while maintaining the established development conventions.
 
 **The implementation plan clearly separates AI assistant tasks (code creation) from Bob's tasks (testing and deployment), ensuring a collaborative development process that follows the established conventions.**
+
+**The learning enforcement system ensures all critical learnings are preserved and systematically applied to future projects.**
